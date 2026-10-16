@@ -7,10 +7,11 @@
 
 #include "mt_main.h"
 #include "mt_ui.h"
-#include "mpu6050.h"
+#include "mt_imu.h"
 
 uint8_t mt_sh1106_addr = 0;
 uint8_t mt_mpu6050_addr = 0;
+bool first_update = true;
 
 /**
   * @brief	(LOCAL) Find the pre-configured devices on the i2c bus.
@@ -44,7 +45,17 @@ mt_status_t mt_init(void){
 	if(status != MT_OK)
 		return status;
 
-	status = mpu6050_init(mt_mpu6050_addr);
+	status = mt_imu_init(mt_mpu6050_addr);
 	return status;
+}
+
+mt_status_t mt_run(void){
+	mt_imu_data imu_data;
+	mt_imu_read(&imu_data);
+
+	mt_ui_update(&imu_data, first_update);
+	first_update = false;
+
+	return MT_OK;
 }
 

@@ -8,6 +8,30 @@
 #ifndef CUSTOM_MPU6050_I2C_INC_MPU6050_TYPES_H_
 #define CUSTOM_MPU6050_I2C_INC_MPU6050_TYPES_H_
 
+typedef struct {
+	int16_t accel_x_raw;
+	int16_t accel_y_raw;
+	int16_t accel_z_raw;
+	int16_t temp_raw;
+	int16_t gyro_x_raw;
+	int16_t gyro_y_raw;
+	int16_t gyro_z_raw;
+} mpu6050_readings_raw;
+
+typedef struct {
+	float accel_x;
+	float accel_y;
+	float accel_z;
+	float temp;
+	float gyro_x;
+	float gyro_y;
+	float gyro_z;
+} mpu6050_readings;
+
+typedef enum{
+	MPU_OK = 0, MPU_ERR, MPU_BUSY, MPU_TIMEOUT, MPU_PARAM_ERR, MPU_SELF_TEST_FAIL
+} mpu6050_status_t;
+
 enum mpu6050_pwr_mgmt_1_flags{
 	MPU6050_PWR_MGMT_1_CLOCK_X_GYRO = 1,	MPU6050_PWR_MGMT_1_CLOCK_Y_GYRO,	MPU6050_PWR_MGMT_1_CLOCK_Z_GYRO,
 	MPU6050_PWR_MGMT_1_CLOCK_EXT_32768k,	MPU6050_PWR_MGMT_1_CLOCK_EXT_192m,	MPU6050_PWR_MGMT_1_CLOCK_STOP = 7,
@@ -33,7 +57,7 @@ enum mpu6050_gyro_config_flags{
 enum mpu6050_accel_config_flags{
 	MPU6050_ACCEL_CONFIG_FS_2 = 0,
 	MPU6050_ACCEL_CONFIG_FS_4 = 8,				MPU6050_ACCEL_CONFIG_FS_8 = 16,			MPU6050_ACCEL_CONFIG_FS_16 = 24,
-	MPU6050_ACCEL_CONFIG_TEST_Z = 32,			MPU6050_ACCEL_CONFIG_TSET_Y = 64,		MPU6050_ACCEL_CONFIG_TEST_X = 128
+	MPU6050_ACCEL_CONFIG_TEST_Z = 32,			MPU6050_ACCEL_CONFIG_TEST_Y = 64,		MPU6050_ACCEL_CONFIG_TEST_X = 128
 };
 
 #endif /* CUSTOM_MPU6050_I2C_INC_MPU6050_TYPES_H_ */

@@ -11,15 +11,13 @@
 #include "stdint.h"
 
 typedef struct {
-	uint16_t accel_x;
-	uint16_t accel_y;
-	uint16_t accel_z;
-
-	uint16_t temp;
-
-	uint16_t gyro_x;
-	uint16_t gyro_y;
-	uint16_t gyro_z;
+	float accel_x;
+	float accel_y;
+	float accel_z;
+	float temp;
+	float gyro_x;
+	float gyro_y;
+	float gyro_z;
 } mt_imu_data;
 
 typedef enum{
