@@ -55,7 +55,7 @@ i2c_status_t mpu6050_init(uint16_t dev){
 
 	HAL_Delay(300); //Wait for MPU6050 to stabilise.
 
-	uint8_t mpu6050_config_data[] = {
+	const uint8_t mpu6050_config_data[] = {
 			MPU6050_SMPRT_DIV_VAL,
 			MPU6050_CONFIG_FLAGS,
 			MPU6050_GYRO_CONFIG_FLAGS,
