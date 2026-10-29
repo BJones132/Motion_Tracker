@@ -93,9 +93,8 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 		sh1106_drawString_aligned(mt_ui_dev, tempString, sizeof(tempString), 0, 1, SH1106_TEXT_ALIGN_LEFT);
 	}
 
-	char pitchBuffer[4] = {0};
-	int16_t intPitch = (int16_t)data->gyro_x;
-	snprintf(pitchBuffer, sizeof(pitchBuffer), "%d", intPitch);
+	char pitchBuffer[5] = {0};
+	snprintf(pitchBuffer, sizeof(pitchBuffer), "%.2f", data->gyro_x);
 	char pitchString[7] = {
 			pitchBuffer[0],
 			pitchBuffer[1],
@@ -107,9 +106,8 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 	};
 	sh1106_drawString_aligned(mt_ui_dev, pitchString, sizeof(pitchString), 0, 5, SH1106_TEXT_ALIGN_RIGHT);
 
-	char rollBuffer[4] = {0};
-	int16_t intRoll = (int16_t)data->gyro_y;
-	snprintf(rollBuffer, sizeof(rollBuffer), "%d", intRoll);
+	char rollBuffer[5] = {0};
+	snprintf(rollBuffer, sizeof(rollBuffer), "%.2f", data->gyro_y);
 	char rollString[7] = {
 			rollBuffer[0],
 			rollBuffer[1],
@@ -121,9 +119,8 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 	};
 	sh1106_drawString_aligned(mt_ui_dev, rollString, sizeof(rollString), 0, 4, SH1106_TEXT_ALIGN_RIGHT);
 
-	char yawBuffer[4] = {0};
-	int16_t intYaw = (int16_t)data->gyro_z;
-	snprintf(yawBuffer, sizeof(yawBuffer), "%d", intYaw);
+	char yawBuffer[5] = {0};
+	snprintf(yawBuffer, sizeof(yawBuffer), "%.2f", data->gyro_z);
 	char yawString[7] = {
 			yawBuffer[0],
 			yawBuffer[1],
@@ -135,39 +132,39 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 	};
 	sh1106_drawString_aligned(mt_ui_dev, yawString, sizeof(yawString), 0, 3, SH1106_TEXT_ALIGN_RIGHT);
 
-	char accel_x_buffer[3] = {' ',' ',' '};
-	char accel_y_buffer[3] = {' ',' ',' '};
-	char accel_z_buffer[3] = {' ',' ',' '};
-	int16_t intAccelX = (int16_t)data->accel_x;
-	int16_t intAccelY = (int16_t)data->accel_y;
-	int16_t intAccelZ = (int16_t)data->accel_z;
-	snprintf(accel_x_buffer, sizeof(accel_x_buffer), "%d", intAccelX);
-	snprintf(accel_y_buffer, sizeof(accel_y_buffer), "%d", intAccelY);
-	snprintf(accel_z_buffer, sizeof(accel_z_buffer), "%d", intAccelZ);
-	char accelString[12] = {
+	char accel_x_buffer[5] = {0};
+	char accel_y_buffer[5] = {0};
+	char accel_z_buffer[5] = {0};
+	snprintf(accel_x_buffer, sizeof(accel_x_buffer), "%.2f", data->accel_x);
+	snprintf(accel_y_buffer, sizeof(accel_y_buffer), "%.2f", data->accel_y);
+	snprintf(accel_z_buffer, sizeof(accel_z_buffer), "%.2f", data->accel_z);
+	char accelString[15] = {
 			accel_x_buffer[0],
 			accel_x_buffer[1],
 			accel_x_buffer[2],
+			accel_x_buffer[3],
 			',',
 			accel_y_buffer[0],
 			accel_y_buffer[1],
 			accel_y_buffer[2],
+			accel_y_buffer[3],
 			',',
 			accel_z_buffer[0],
 			accel_z_buffer[1],
 			accel_z_buffer[2],
+			accel_z_buffer[3],
 			'g'
 	};
 	sh1106_drawString_aligned(mt_ui_dev, accelString, sizeof(accelString), 0, 2, SH1106_TEXT_ALIGN_RIGHT);
 
-	char tempBuffer[4] = {0};
-	int16_t intTemp = (int16_t)data->temp;
-	snprintf(tempBuffer, sizeof(tempBuffer), "%d", intTemp);
-	char tempString[6] = {
+	char tempBuffer[6] = {0};
+	snprintf(tempBuffer, sizeof(tempBuffer), "%.2f", data->temp);
+	char tempString[7] = {
 			tempBuffer[0],
 			tempBuffer[1],
 			tempBuffer[2],
 			tempBuffer[3],
+			tempBuffer[4],
 			0xB1U,
 			'C'
 	};
