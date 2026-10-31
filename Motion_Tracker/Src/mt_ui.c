@@ -76,8 +76,12 @@ mt_status_t mt_ui_init(uint16_t dev){
 }
 
 mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
+	mt_status_t status;
 	if(first_update){
-		sh1106_clear(mt_ui_dev);
+		status = sh1106_clear(mt_ui_dev);
+		if(status != MT_OK)
+			return status;
+
 		const char headerString[] = "MOTION TRACKER";
 		const char pitchChangeString[] = "Pitch:";
 		const char rollChangeString[] = "Roll:";
@@ -85,12 +89,24 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 		const char accelString[] = "Accel:";
 		const char tempString[] = "Temp:";
 
-		sh1106_drawString(mt_ui_dev, headerString, sizeof(headerString), 22, 7);
-		sh1106_drawString_aligned(mt_ui_dev, pitchChangeString, sizeof(pitchChangeString), 0, 5, SH1106_TEXT_ALIGN_LEFT);
-		sh1106_drawString_aligned(mt_ui_dev, rollChangeString, sizeof(rollChangeString), 0, 4, SH1106_TEXT_ALIGN_LEFT);
-		sh1106_drawString_aligned(mt_ui_dev, yawChangeString, sizeof(yawChangeString), 0, 3, SH1106_TEXT_ALIGN_LEFT);
-		sh1106_drawString_aligned(mt_ui_dev, accelString, sizeof(accelString), 0, 2, SH1106_TEXT_ALIGN_LEFT);
-		sh1106_drawString_aligned(mt_ui_dev, tempString, sizeof(tempString), 0, 1, SH1106_TEXT_ALIGN_LEFT);
+		status = sh1106_drawString(mt_ui_dev, headerString, sizeof(headerString), 22, 7);
+		if(status != MT_OK)
+			return status;
+		status = sh1106_drawString_aligned(mt_ui_dev, pitchChangeString, sizeof(pitchChangeString), 0, 5, SH1106_TEXT_ALIGN_LEFT);
+		if(status != MT_OK)
+			return status;
+		status = sh1106_drawString_aligned(mt_ui_dev, rollChangeString, sizeof(rollChangeString), 0, 4, SH1106_TEXT_ALIGN_LEFT);
+		if(status != MT_OK)
+			return status;
+		status = sh1106_drawString_aligned(mt_ui_dev, yawChangeString, sizeof(yawChangeString), 0, 3, SH1106_TEXT_ALIGN_LEFT);
+		if(status != MT_OK)
+			return status;
+		status = sh1106_drawString_aligned(mt_ui_dev, accelString, sizeof(accelString), 0, 2, SH1106_TEXT_ALIGN_LEFT);
+		if(status != MT_OK)
+			return status;
+		status = sh1106_drawString_aligned(mt_ui_dev, tempString, sizeof(tempString), 0, 1, SH1106_TEXT_ALIGN_LEFT);
+		if(status != MT_OK)
+			return status;
 	}
 
 	char pitchBuffer[5] = {0};
@@ -104,7 +120,9 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 			'/',
 			's'
 	};
-	sh1106_drawString_aligned(mt_ui_dev, pitchString, sizeof(pitchString), 0, 5, SH1106_TEXT_ALIGN_RIGHT);
+	status = sh1106_drawString_aligned(mt_ui_dev, (const char*)pitchString, sizeof(pitchString), 0, 5, SH1106_TEXT_ALIGN_RIGHT);
+	if(status != MT_OK)
+		return status;
 
 	char rollBuffer[5] = {0};
 	snprintf(rollBuffer, sizeof(rollBuffer), "%.2f", data->gyro_y);
@@ -117,7 +135,9 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 			'/',
 			's'
 	};
-	sh1106_drawString_aligned(mt_ui_dev, rollString, sizeof(rollString), 0, 4, SH1106_TEXT_ALIGN_RIGHT);
+	status = sh1106_drawString_aligned(mt_ui_dev, (const char*)rollString, sizeof(rollString), 0, 4, SH1106_TEXT_ALIGN_RIGHT);
+	if(status != MT_OK)
+		return status;
 
 	char yawBuffer[5] = {0};
 	snprintf(yawBuffer, sizeof(yawBuffer), "%.2f", data->gyro_z);
@@ -130,7 +150,9 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 			'/',
 			's'
 	};
-	sh1106_drawString_aligned(mt_ui_dev, yawString, sizeof(yawString), 0, 3, SH1106_TEXT_ALIGN_RIGHT);
+	status = sh1106_drawString_aligned(mt_ui_dev, (const char*)yawString, sizeof(yawString), 0, 3, SH1106_TEXT_ALIGN_RIGHT);
+	if(status != MT_OK)
+		return status;
 
 	char accel_x_buffer[5] = {0};
 	char accel_y_buffer[5] = {0};
@@ -155,7 +177,9 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 			accel_z_buffer[3],
 			'g'
 	};
-	sh1106_drawString_aligned(mt_ui_dev, accelString, sizeof(accelString), 0, 2, SH1106_TEXT_ALIGN_RIGHT);
+	status = sh1106_drawString_aligned(mt_ui_dev, (const char*)accelString, sizeof(accelString), 0, 2, SH1106_TEXT_ALIGN_RIGHT);
+	if(status != MT_OK)
+		return status;
 
 	char tempBuffer[6] = {0};
 	snprintf(tempBuffer, sizeof(tempBuffer), "%.2f", data->temp);
@@ -168,7 +192,9 @@ mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 			0xB1U,
 			'C'
 	};
-	sh1106_drawString_aligned(mt_ui_dev, tempString, sizeof(tempString), 0, 1, SH1106_TEXT_ALIGN_RIGHT);
+	status = sh1106_drawString_aligned(mt_ui_dev, (const char*)tempString, sizeof(tempString), 0, 1, SH1106_TEXT_ALIGN_RIGHT);
+
+	return status;
 }
 
 

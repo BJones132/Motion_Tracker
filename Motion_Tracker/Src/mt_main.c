@@ -51,9 +51,13 @@ mt_status_t mt_init(void){
 
 mt_status_t mt_run(void){
 	mt_imu_data imu_data;
-	mt_imu_read(&imu_data);
+	mt_status_t status = mt_imu_read(&imu_data);
+	if(status != MT_OK)
+		return status;
 
-	mt_ui_update(&imu_data, first_update);
+	status = mt_ui_update(&imu_data, first_update);
+	if(status != MT_OK)
+		return status;
 	first_update = false;
 
 	return MT_OK;
