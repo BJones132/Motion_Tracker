@@ -179,6 +179,8 @@ i2c_status_t sh1106_drawString(uint16_t dev, const char* string, size_t len, uin
 	if(status != I2C_OK)
 		return status;
 
+	free(drawBuf);
+
 	sh1106_setColAddressCommand(0, setColBuf, true);
 
 	const uint8_t endDrawBuf[] = {
