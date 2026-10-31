@@ -15,7 +15,9 @@ extern I2C_HandleTypeDef I2C_BUS_HANDLE;
   * @retval	bool
   */
 bool i2c_bus_present(uint16_t dev){
+	__disable_irq();
 	i2c_status_t status = (i2c_status_t)HAL_I2C_IsDeviceReady(&I2C_BUS_HANDLE, I2C_ADDRESS_8BIT(dev), I2C_BUS_TRIES, I2C_BUS_TIMEOUT_MS);
+	__enable_irq();
 
 	switch(status){
 		case I2C_OK:
@@ -42,7 +44,9 @@ bool i2c_bus_present(uint16_t dev){
   * @retval i2c_status_t	Status
   */
 i2c_status_t i2c_bus_read(uint16_t dev, uint8_t reg, uint8_t* buf, uint16_t len){
+	__disable_irq();
 	i2c_status_t status = (i2c_status_t)HAL_I2C_Mem_Read(&I2C_BUS_HANDLE, I2C_ADDRESS_8BIT(dev), reg, I2C_MEMADD_SIZE_8BIT, (uint8_t*)buf, len, I2C_BUS_TIMEOUT_MS);
+	__enable_irq();
 
 	switch(status){
 		case I2C_BUSY:
@@ -61,7 +65,9 @@ i2c_status_t i2c_bus_read(uint16_t dev, uint8_t reg, uint8_t* buf, uint16_t len)
   * @retval i2c_status_t	Status
   */
 i2c_status_t i2c_bus_write(uint16_t dev, uint8_t reg, const uint8_t* buf, uint16_t len){
+	__disable_irq();
 	i2c_status_t status = (i2c_status_t)HAL_I2C_Mem_Write(&I2C_BUS_HANDLE, I2C_ADDRESS_8BIT(dev), reg, I2C_MEMADD_SIZE_8BIT, (uint8_t*)buf, len, I2C_BUS_TIMEOUT_MS);
+	__enable_irq();
 
 	switch(status){
 		case I2C_BUSY:
