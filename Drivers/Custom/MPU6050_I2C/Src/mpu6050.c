@@ -11,6 +11,12 @@
 #include "mpu6050_registers.h"
 #include "mpu6050_config.h"
 
+/**
+  * @brief	(LOCAL) Process MPU6050 readings to G's, degrees Celsius and degrees per second.
+  * @param  raw_readings			Unprocessed readings..
+  * @param	out processed_readings	Processed readings output.
+  * @retval void
+  */
 static void mpu6050_process_readings(mpu6050_readings_raw* raw_readings, mpu6050_readings* processed_readings){
 	float accelConversion = 16384;
 	if(MPU6050_ACCEL_CONFIG_FLAGS & MPU6050_ACCEL_CONFIG_FS_16)
@@ -57,6 +63,12 @@ typedef struct{
 	float ftza;
 } mpu6050_self_test_factory_trims;
 
+/**
+  * @brief	(LOCAL) Get MPU6050 self test readings.
+  * @param  dev					Device to read from.
+  * @param	out readings		Self test readings output.
+  * @retval mpu6050_status_t	Status.
+  */
 static mpu6050_status_t mpu6050_get_self_test_readings(uint16_t dev, mpu6050_self_test_readings* readings){
 	if(dev == 0x00U)
 		return I2C_PARAM_ERR;
@@ -74,6 +86,12 @@ static mpu6050_status_t mpu6050_get_self_test_readings(uint16_t dev, mpu6050_sel
 	return I2C_OK;
 }
 
+/**
+  * @brief	(LOCAL) Get MPU6050 factory trims.
+  * @param  readings			Averaged readings.
+  * @param	out trims			Factory trims output.
+  * @retval void
+  */
 static void mpu6050_get_self_test_factory_trims(mpu6050_self_test_readings* readings, mpu6050_self_test_factory_trims* trims){
 	uint8_t stxg = readings->self_test_x & 0x0FU;
 	uint8_t styg = readings->self_test_y & 0x0FU;
@@ -107,6 +125,12 @@ static void mpu6050_get_self_test_factory_trims(mpu6050_self_test_readings* read
 		trims->ftza = (4096 * 0.34 * powf(0.92 / 0.34, ((float)stza - 1) / (powf(2, 5) - 2)));
 }
 
+/**
+  * @brief	(LOCAL) Get average readings from MPU6050 data.
+  * @param  dev					Device to read from.
+  * @param	out readings		Readings output.
+  * @retval mpu6050_status_t	Status.
+  */
 static mpu6050_status_t mpu6050_get_avg_readings(uint16_t dev, mpu6050_readings_raw* readings){
 	int32_t avg_accel_x = 0;
 	int32_t avg_accel_y = 0;
@@ -148,6 +172,13 @@ static mpu6050_status_t mpu6050_get_avg_readings(uint16_t dev, mpu6050_readings_
 	return I2C_OK;
 }
 
+/**
+  * @brief	(LOCAL) Check whether self test data is within specification limits.
+  * @param  baseline_readings		MPU6050 readings with self test bits off.
+  * @param	self_test_readings		MPU6050 readings with self test bits on.
+  * @param	factory_trims			MPU6050 factory trims for this device.
+  * @retval bool	Whether self test data passes.
+  */
 static bool mpu6050_self_test_pass(mpu6050_readings_raw* baseline_readings,
 				mpu6050_readings_raw* self_test_readings,
 				mpu6050_self_test_factory_trims* factory_trims){
@@ -187,6 +218,11 @@ static bool mpu6050_self_test_pass(mpu6050_readings_raw* baseline_readings,
 	return true;
 }
 
+/**
+  * @brief	(LOCAL) Perform MPU6050 self test.
+  * @param  dev		Address of device to perform self test on.
+  * @retval bool	Whether self test passes.
+  */
 static bool mpu6050_self_test(uint16_t dev){
 	mpu6050_self_test_readings st_readings;
 	if(mpu6050_get_self_test_readings(dev, &st_readings) != I2C_OK)
@@ -221,6 +257,12 @@ static bool mpu6050_self_test(uint16_t dev){
 	return mpu6050_self_test_pass(&avg_baseline_readings, &avg_self_test_readings, &factory_trims);
 }
 
+/**
+  * @brief	Initialise MPU6050.
+  * @param  dev					Address of device to initialise.
+  * @param	self_test_enable	Whether to perform self test.
+  * @retval mpu6050_status_t	Status
+  */
 mpu6050_status_t mpu6050_init(uint16_t dev, bool self_test_enable){
 	if(dev == 0x00U)
 		return MPU_PARAM_ERR;
@@ -260,6 +302,12 @@ mpu6050_status_t mpu6050_init(uint16_t dev, bool self_test_enable){
 	return status;
 }
 
+/**
+  * @brief	Read MPU6050 acceleration, temp and gyro data.
+  * @param  dev				Address of device to read from.
+  * @param	out readings	Readings output.
+  * @retval mpu6050_status_t	Status
+  */
 mpu6050_status_t mpu6050_get_readings(uint16_t dev, mpu6050_readings_raw* readings){
 	if(dev == 0x00U)
 		return I2C_PARAM_ERR;
@@ -281,6 +329,12 @@ mpu6050_status_t mpu6050_get_readings(uint16_t dev, mpu6050_readings_raw* readin
 	return MPU_OK;
 }
 
+/**
+  * @brief	Read MPU6050 acceleration, temp and gyro data and output converted data.
+  * @param  dev						Address of device to read from.
+  * @param	out processed_readings	Readings output.
+  * @retval mpu6050_status_t	Status
+  */
 mpu6050_status_t mpu6050_get_processed_readings(uint16_t dev, mpu6050_readings* processed_readings){
 	mpu6050_readings_raw readings;
 	mpu6050_status_t status = mpu6050_get_readings(dev, &readings);

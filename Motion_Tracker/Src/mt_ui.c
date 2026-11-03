@@ -12,7 +12,7 @@ uint16_t mt_ui_dev;
 
 /**
   * @brief	(LOCAL) Display the setting up screen to the user.
-  * @retval void
+  * @retval i2c_status_t	status
   */
 static i2c_status_t show_setup_screen(){
 	if(mt_ui_dev == 0)
@@ -75,6 +75,12 @@ mt_status_t mt_ui_init(uint16_t dev){
 	return MT_OK;
 }
 
+/**
+  * @brief	Update UI with imu data.
+  * @param  data			IMU data.
+  * @param	first_update	Whether labels should be drawn.
+  * @retval mt_status_t	Status
+  */
 mt_status_t mt_ui_update(mt_imu_data* data, bool first_update){
 	mt_status_t status;
 	if(first_update){

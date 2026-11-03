@@ -9,6 +9,11 @@
 
 uint16_t mt_imu_dev;
 
+/**
+  * @brief	Initialise IMU device                                                                                                                 .
+  * @param  dev			Address of IMU device.
+  * @retval mt_status_t	Status
+  */
 mt_status_t mt_imu_init(uint16_t dev){
 	if(dev == 0x00U)
 		return MT_PARAM_ERR;
@@ -18,6 +23,11 @@ mt_status_t mt_imu_init(uint16_t dev){
 	return mpu6050_init(dev, MT_MPU6050_SELF_TEST_ENABLE);
 }
 
+/**
+  * @brief	Read IMU data.
+  * @param  out	data			IMU data output.
+  * @retval mt_status_t	Status
+  */
 mt_status_t mt_imu_read(mt_imu_data* data){
 	mpu6050_readings readings;
 	mpu6050_status_t status = mpu6050_get_processed_readings(mt_imu_dev, &readings);
